@@ -1,34 +1,21 @@
-// app.js — Ponto de entrada da aplicação. Configuração e montagem.
+﻿require("dotenv").config();
+
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  throw new Error("Defina JWT_SECRET com pelo menos 32 caracteres no arquivo .env.");
+}
 
 const express = require("express");
 const app = express();
-
-// Importação das rotas organizadas por recurso
+const authRoutes = require("./routes/authRoutes");
 const livroRoutes = require("./routes/livroRoutes");
-
-// Importação do middleware centralizado de erros
 const errorHandler = require("./middlewares/errorHandler");
 
-// =============================================
-// Configuração de Middlewares Globais
-// =============================================
-app.use(express.json());
-
-// =============================================
-// Montagem das Rotas
-// =============================================
+app.use(express.json({ limit: "10kb" }));
+app.use("/auth", authRoutes);
 app.use("/livros", livroRoutes);
-
-// =============================================
-// Middleware de Tratamento Centralizado de Erros
-// =============================================
 app.use(errorHandler);
 
-// =============================================
-// Inicialização do Servidor
-// =============================================
-const PORTA = 3000;
-
+const PORTA = process.env.PORT || 3000;
 app.listen(PORTA, function () {
   console.log("API de Livros rodando em http://localhost:" + PORTA);
 });
