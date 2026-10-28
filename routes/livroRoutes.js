@@ -1,30 +1,26 @@
-// routes/livroRoutes.js — Definição das rotas do recurso "Livros"
+﻿// routes/livroRoutes.js — Definição das rotas do recurso "Livros"
 
 const express = require("express");
 const router = express.Router();
 
 const livroController = require("../controllers/livroController");
 
-// =============================================
-// Definição das Rotas
-// =============================================
-
 // Lista todos os livros
-router.get("/getLivros", livroController.listar);
+router.get("/", livroController.listar);
+
+// Resumo de um livro (antes da rota genérica por ID)
+router.get("/:id/resumo", livroController.buscarResumo);
 
 // Busca um livro específico pelo identificador
 router.get("/:id", livroController.buscarPorId);
 
-// Resumo de um livro
-router.get("/:id/resumo", livroController.buscarResumo);
-
 // Cria um novo livro
-router.get("/novo", livroController.criar);
+router.post("/", livroController.criar);
 
 // Atualiza um livro existente
-router.put("/", livroController.atualizar);
+router.put("/:id", livroController.atualizar);
 
-// Remove livros
-router.delete("/", livroController.remover);
+// Remove um livro específico
+router.delete("/:id", livroController.remover);
 
 module.exports = router;
